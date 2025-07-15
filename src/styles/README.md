@@ -1,32 +1,32 @@
-# ?? Estilos Modulares SCSS
+# 🎨 Estilos Modulares SCSS
 
-Esta carpeta contiene todos los estilos SCSS organizados de forma modular para mantener un c�digo limpio y escalable.
+Esta carpeta contiene todos los estilos SCSS organizados de forma modular para mantener un código limpio y escalable.
 
-## ?? **Estructura de Archivos**
+## 📁 **Estructura de Archivos**
 
 ```
 styles/
-??? ?? index.scss          # Archivo principal que importa todos los estilos
-??? ?? main.scss           # Variables globales y estilos base
-??? ?? header.scss         # Estilos del header y navegaci�n
-??? ?? pokemon-card.scss   # Estilos de la tarjeta de Pokemon
-??? ?? modal.scss          # Estilos del modal de detalles
-??? ? animations.scss     # Animaciones y keyframes
-??? ?? transitions.scss    # Transiciones de Vue.js
+├── 📄 index.scss          # Archivo principal que importa todos los estilos
+├── 🎨 main.scss           # Variables globales y estilos base
+├── 🏠 header.scss         # Estilos del header y navegación
+├── 🃏 pokemon-card.scss   # Estilos de la tarjeta de Pokemon
+├── 📱 modal.scss          # Estilos del modal de detalles
+├── ✨ animations.scss     # Animaciones y keyframes
+└── 🔄 transitions.scss    # Transiciones de Vue.js
 ```
 
-## ?? **Prop�sito de Cada Archivo**
+## 🎯 **Propósito de Cada Archivo**
 
-### ?? **index.scss**
-- **Funci�n**: Archivo principal de estilos
-- **Contenido**: Imports de todos los m�dulos SCSS
+### 📄 **index.scss**
+- **Función**: Archivo principal de estilos
+- **Contenido**: Imports de todos los módulos SCSS
 - **Uso**: Se importa en `App.vue`
 
-### ?? **main.scss**
-- **Funci�n**: Variables globales y estilos base
+### 🎨 **main.scss**
+- **Función**: Variables globales y estilos base
 - **Contenido**: 
   - Variables de colores principales
-  - Tipograf�a base (Google Fonts)
+  - Tipografía base (Google Fonts)
   - Estilos generales del body
   - Clases utilitarias
 - **Variables principales**:
@@ -36,70 +36,70 @@ styles/
   $pokedex-blue: #4169e1;
   ```
 
-### ?? **header.scss**
-- **Funci�n**: Estilos del header responsivo
+### 🏠 **header.scss**
+- **Función**: Estilos del header responsivo
 - **Contenido**:
   - Layout del header principal
-  - Estilos del t�tulo
-  - Dise�o responsivo
+  - Estilos del título
+  - Diseño responsivo
   - Efectos visuales
 
-### ?? **pokemon-card.scss**
-- **Funci�n**: Estilos de la tarjeta principal de Pokemon
+### 🃏 **pokemon-card.scss**
+- **Función**: Estilos de la tarjeta principal de Pokemon
 - **Contenido**:
   - Layout de la tarjeta
   - Estilos de la imagen
-  - Informaci�n del Pokemon
+  - Información del Pokemon
   - Estados hover e interacciones
-  - Dise�o responsivo
+  - Diseño responsivo
 
-### ?? **modal.scss**
-- **Funci�n**: Estilos del modal de detalles
+### 📱 **modal.scss**
+- **Función**: Estilos del modal de detalles
 - **Contenido**:
   - Overlay del modal
   - Contenedor del modal
-  - Informaci�n adicional
-  - Botones de acci�n
+  - Información adicional
+  - Botones de acción
   - Animaciones de apertura/cierre
 
-### ? **animations.scss**
-- **Funci�n**: Animaciones y keyframes
+### ✨ **animations.scss**
+- **Función**: Animaciones y keyframes
 - **Contenido**:
-  - Animaci�n del spinner (Pokeball)
+  - Animación del spinner (Pokeball)
   - Efectos de entrada escalonada
   - Animaciones de hover
   - Keyframes personalizados
 
-### ?? **transitions.scss**
-- **Funci�n**: Transiciones de Vue.js
+### 🔄 **transitions.scss**
+- **Función**: Transiciones de Vue.js
 - **Contenido**:
   - Transiciones entre componentes
   - Efectos de entrada/salida
   - Animaciones de lista
   - Transiciones de estado
 
-## ?? **Ventajas de la Modularizaci�n**
+## 🚀 **Ventajas de la Modularización**
 
-### ? **Mantenimiento**
-- **F�cil localizaci�n**: Cada estilo tiene su archivo espec�fico
+### ✅ **Mantenimiento**
+- **Fácil localización**: Cada estilo tiene su archivo específico
 - **Modificaciones aisladas**: Cambios no afectan otros componentes
-- **C�digo limpio**: Mejor organizaci�n y legibilidad
+- **Código limpio**: Mejor organización y legibilidad
 
-### ? **Escalabilidad**
-- **Nuevos componentes**: F�cil agregar nuevos archivos SCSS
-- **Reutilizaci�n**: Variables y mixins compartidos
-- **Performance**: Importaci�n selectiva
+### ✅ **Escalabilidad**
+- **Nuevos componentes**: Fácil agregar nuevos archivos SCSS
+- **Reutilización**: Variables y mixins compartidos
+- **Performance**: Importación selectiva
 
-### ? **Colaboraci�n**
-- **Conflictos m�nimos**: Desarrolladores trabajan en archivos separados
-- **Revisi�n f�cil**: Cambios espec�ficos por archivo
-- **Documentaci�n**: Cada archivo tiene prop�sito claro
+### ✅ **Colaboración**
+- **Conflictos mínimos**: Desarrolladores trabajan en archivos separados
+- **Revisión fácil**: Cambios específicos por archivo
+- **Documentación**: Cada archivo tiene propósito claro
 
-## ?? **Sistema de Variables**
+## 🎨 **Sistema de Variables**
 
-### ?? **Colores Principales**
+### 🌈 **Colores Principales**
 ```scss
-// Colores base de la aplicaci�n
+// Colores base de la aplicación
 $pokedex-red: #dc143c;
 $pokedex-green: #32cd32; 
 $pokedex-blue: #4169e1;
@@ -110,7 +110,7 @@ $error-color: #dc3545;
 $warning-color: #ffc107;
 ```
 
-### ?? **Breakpoints Responsivos**
+### 📱 **Breakpoints Responsivos**
 ```scss
 // Mobile first approach
 $mobile: 480px;
@@ -119,21 +119,21 @@ $desktop: 1024px;
 $large: 1200px;
 ```
 
-### ?? **Tipograf�a**
+### 🎯 **Tipografía**
 ```scss
 // Fuente principal
 $font-family: 'Changa', sans-serif;
 
-// Tama�os de fuente
+// Tamaños de fuente
 $font-size-small: 0.875rem;
 $font-size-base: 1rem;
 $font-size-large: 1.25rem;
 $font-size-xl: 1.5rem;
 ```
 
-## ?? **Gu�a de Uso**
+## 📋 **Guía de Uso**
 
-### ?? **Para Desarrolladores**
+### 🔧 **Para Desarrolladores**
 
 1. **Modificar estilos existentes**:
    ```scss
@@ -150,14 +150,14 @@ $font-size-xl: 1.5rem;
 
 3. **Usar variables globales**:
    ```scss
-   // Las variables de main.scss est�n disponibles en todos los archivos
+   // Las variables de main.scss están disponibles en todos los archivos
    .mi-componente {
      color: $pokedex-red;
      font-family: $font-family;
    }
    ```
 
-### ?? **Media Queries**
+### 📱 **Media Queries**
 ```scss
 // Ejemplo de uso responsivo
 .mi-componente {
@@ -176,62 +176,62 @@ $font-size-xl: 1.5rem;
 }
 ```
 
-## ??? **Mejores Pr�cticas**
+## 🛠️ **Mejores Prácticas**
 
-### ? **Nomenclatura**
+### ✅ **Nomenclatura**
 - **BEM methodology**: `.block__element--modifier`
 - **Clases descriptivas**: `.pokemon-card`, `.modal-overlay`
-- **Variables sem�nticas**: `$primary-color`, `$border-radius`
+- **Variables semánticas**: `$primary-color`, `$border-radius`
 
-### ? **Organizaci�n**
+### ✅ **Organización**
 - **Un componente por archivo**: Mantener archivos enfocados
 - **Imports organizados**: Agrupar por tipo en index.scss
 - **Comentarios descriptivos**: Explicar secciones complejas
 
-### ? **Performance**
-- **Evitar anidaci�n profunda**: M�ximo 3-4 niveles
-- **Selectores espec�ficos**: Evitar selectores universales
-- **Optimizaci�n de assets**: Usar variables para valores repetidos
+### ✅ **Performance**
+- **Evitar anidación profunda**: Máximo 3-4 niveles
+- **Selectores específicos**: Evitar selectores universales
+- **Optimización de assets**: Usar variables para valores repetidos
 
-## ?? **Migraci�n desde Monol�tico**
+## 🔄 **Migración desde Monolítico**
 
-### ?? **Antes vs Despu�s**
+### 📊 **Antes vs Después**
 
-| Aspecto | Antes | Despu�s |
+| Aspecto | Antes | Después |
 |---------|-------|---------|
 | **Archivos** | 1 archivo grande | 7 archivos modulares |
-| **L�neas por archivo** | 700+ l�neas | 50-150 l�neas |
-| **Mantenibilidad** | Dif�cil | Excelente |
-| **B�squeda** | Control+F en archivo grande | Localizaci�n directa |
+| **Líneas por archivo** | 700+ líneas | 50-150 líneas |
+| **Mantenibilidad** | Difícil | Excelente |
+| **Búsqueda** | Control+F en archivo grande | Localización directa |
 
-### ?? **Beneficios Obtenidos**
-- **Reducci�n 80% en tiempo de localizaci�n** de estilos
-- **Eliminaci�n de conflictos** entre desarrolladores
-- **Mejora en performance** de compilaci�n SCSS
+### 🚀 **Beneficios Obtenidos**
+- **Reducción 80% en tiempo de localización** de estilos
+- **Eliminación de conflictos** entre desarrolladores
+- **Mejora en performance** de compilación SCSS
 - **Facilidad para testing** de componentes individuales
 
-## ?? **Roadmap de Estilos**
+## 📈 **Roadmap de Estilos**
 
-### ?? **v2.0 - Pr�ximas Mejoras**
-- [ ] ?? Sistema de themes (claro/oscuro)
-- [ ] ?? Mejoras en responsive design
-- [ ] ? M�s animaciones interactivas
-- [ ] ?? Paleta de colores extendida
+### 🎯 **v2.0 - Próximas Mejoras**
+- [ ] 🎨 Sistema de themes (claro/oscuro)
+- [ ] 📱 Mejoras en responsive design
+- [ ] ✨ Más animaciones interactivas
+- [ ] 🌈 Paleta de colores extendida
 
-### ?? **v3.0 - Funcionalidades Avanzadas**
-- [ ] ?? Animaciones con CSS Grid
-- [ ] ?? Transiciones de p�gina completa
-- [ ] ?? Sistema de espaciado consistente
-- [ ] ?? Efectos de paralaje
+### 🚀 **v3.0 - Funcionalidades Avanzadas**
+- [ ] 🎪 Animaciones con CSS Grid
+- [ ] 🔄 Transiciones de página completa
+- [ ] 📐 Sistema de espaciado consistente
+- [ ] 🎭 Efectos de paralaje
 
 ---
 
-## ?? **Consejos para Contribuir**
+## 💡 **Consejos para Contribuir**
 
-1. **Mant�n la consistencia** con el sistema de variables existente
+1. **Mantén la consistencia** con el sistema de variables existente
 2. **Documenta cambios complejos** con comentarios
-3. **Testa en m�ltiples dispositivos** antes de commit
+3. **Testa en múltiples dispositivos** antes de commit
 4. **Sigue la nomenclatura BEM** para nuevas clases
 5. **Optimiza para performance** evitando selectores complejos
 
-�Necesitas agregar un nuevo componente? �Sigue la estructura modular! ??
+¿Necesitas agregar un nuevo componente? ¡Sigue la estructura modular! 🚀
