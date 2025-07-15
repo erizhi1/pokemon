@@ -3,7 +3,7 @@
     <header class="header">
       <label for="">
         Escribe el Pokemon que quieras buscar (por ID o nombre):
-        <input type="text" v-model="pokemonID" placeholder="Ej: 25 o pikachu" @keyup.enter="searchPokemon" />
+        <input type="text" v-model="pokemonID" placeholder="Ej: pikachu, charizard o 1-1025" @keyup.enter="searchPokemon" />
         <button class="searchButton" @click="searchPokemon">Buscar Pokemon</button>
       </label>
     </header>
@@ -114,18 +114,35 @@ export default{
         return;
       }
 
+      // Validar que si es un número, esté en el rango válido
+      const pokemonInput = this.pokemonID.trim();
+      const isNumeric = /^\d+$/.test(pokemonInput);
+      
+      if (isNumeric) {
+        const pokemonNumber = parseInt(pokemonInput);
+        if (pokemonNumber < 1 || pokemonNumber > 1025) {
+          alert(`ID de Pokémon fuera de rango. Por favor ingresa un número entre 1 y 1025, o usa el nombre del Pokémon.`);
+          return;
+        }
+      }
+
       try {
-        // Mostrar loading y ocultar tarjeta anterior con transición
+        // Mostrar loading y ocultar tarjeta anterior con transición más suave
         this.isLoading = true;
         this.showCard = false;
         
-        // Pequeña pausa para la transición de salida
-        await new Promise(resolve => setTimeout(resolve, 300));
+        // Pausa más corta para la transición de salida
+        await new Promise(resolve => setTimeout(resolve, 200));
         
         const pokemonTofind = await fetch (`${pokeapi}${this.pokemonID.toLowerCase()}`);
         
         if (!pokemonTofind.ok) {
-          throw new Error(`Pokémon no encontrado: ${this.pokemonID}`);
+          // Mensaje de error más específico
+          if (pokemonTofind.status === 404) {
+            throw new Error(`El Pokémon "${this.pokemonID}" no existe. Verifica el nombre o ID.`);
+          } else {
+            throw new Error(`Error de conexión (${pokemonTofind.status}). Inténtalo de nuevo.`);
+          }
         }
         
         const pokemon = await pokemonTofind.json();
@@ -136,15 +153,18 @@ export default{
         const species = await speciesResponse.json();
         this.pokemonSpecies = species;
         
-        // Pausa para mostrar el loading un poco más
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Pausa optimizada para mostrar el loading
+        await new Promise(resolve => setTimeout(resolve, 400));
         
         this.isLoading = false;
         
-        // Mostrar la nueva tarjeta con transición de entrada
+        // Mostrar la nueva tarjeta con transición de entrada más rápida
         setTimeout(() => {
           this.showCard = true;
-        }, 50);
+        }, 30);
+        
+        // Limpiar el campo de búsqueda después de encontrar el Pokémon
+        this.pokemonID = '';
         
         console.log(pokemon);
         console.log(species);
@@ -152,7 +172,13 @@ export default{
       } catch (error) {
         this.isLoading = false;
         this.showCard = false;
-        alert(`Error al buscar el Pokémon "${this.pokemonID}". Verifica que el nombre o ID sea correcto.`);
+        
+        // Mostrar alerta con mensaje personalizado
+        if (error.message.includes('no existe') || error.message.includes('404')) {
+          alert(`❌ ${error.message}\n\n💡 Sugerencias:\n• Verifica la ortografía del nombre\n• Usa nombres en inglés (ej: pikachu, charizard)\n• Prueba con un ID válido (1-1025)`);
+        } else {
+          alert(`⚠️ ${error.message}`);
+        }
       }
     }
   }
@@ -387,7 +413,7 @@ ul {
   border-radius: 50%;
   background: linear-gradient(to bottom, #ff6b6b 50%, white 50%);
   border: 4px solid #333;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
   
   &::before {
     content: '';
@@ -425,7 +451,7 @@ ul {
   color: #333;
   font-family: 'Changa', sans-serif;
   font-weight: bold;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 1.2s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -433,23 +459,23 @@ ul {
   50% { opacity: 0.6; }
 }
 
-// Transiciones de la tarjeta Pokémon
+// Transiciones de la tarjeta Pokémon - Mejoradas
 .pokemon-card-enter-active {
-  transition: all 0.6s ease-out;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .pokemon-card-leave-active {
-  transition: all 0.4s ease-in;
+  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
 }
 
 .pokemon-card-enter-from {
   opacity: 0;
-  transform: translateY(30px) scale(0.9);
+  transform: translateY(40px) scale(0.85);
 }
 
 .pokemon-card-leave-to {
   opacity: 0;
-  transform: translateY(-20px) scale(0.95);
+  transform: translateY(-30px) scale(0.9);
 }
 
 .pokemon-card-enter-to,
@@ -458,49 +484,57 @@ ul {
   transform: translateY(0) scale(1);
 }
 
-// Animación de entrada para elementos individuales
+// Animación de entrada mejorada para elementos individuales
 .pokemonCard {
-  animation: slideInUp 0.6s ease-out;
+  animation: slideInUpImproved 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes slideInUp {
-  from {
+@keyframes slideInUpImproved {
+  0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
-  to {
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-// Animaciones escalonadas para las secciones
+// Animaciones escalonadas mejoradas para las secciones
 .pokemonCard .nameImage {
-  animation: fadeInScale 0.8s ease-out 0.1s both;
+  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
 }
 
 .pokemonCard .type {
-  animation: fadeInScale 0.8s ease-out 0.2s both;
+  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
 }
 
 .pokemonCard .stats {
-  animation: fadeInScale 0.8s ease-out 0.3s both;
+  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
 }
 
 .pokemonCard .moves {
-  animation: fadeInScale 0.8s ease-out 0.4s both;
+  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both;
 }
 
 .pokemonCard .habitat {
-  animation: fadeInScale 0.8s ease-out 0.5s both;
+  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
 }
 
-@keyframes fadeInScale {
-  from {
+@keyframes fadeInScaleImproved {
+  0% {
     opacity: 0;
-    transform: translateY(20px) scale(0.9);
+    transform: translateY(25px) scale(0.9);
   }
-  to {
+  50% {
+    opacity: 0.7;
+    transform: translateY(-3px) scale(1.01);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
