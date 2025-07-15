@@ -57,13 +57,14 @@
       </transition>
     </main>
     
-    <!-- Modal para información adicional -->
-    <div v-if="showModal" class="modal-overlay" @click="showModal = false">
-      <div class="modal-content" @click.stop>
-        <div class="modal-header">
-          <h2>{{ pokemonData.name }} - Información adicional</h2>
-          <button class="close-button" @click="showModal = false">×</button>
-        </div>
+    <!-- Modal para información adicional con transición -->
+    <transition name="modal" appear>
+      <div v-if="showModal" class="modal-overlay" @click="showModal = false">
+        <div class="modal-content" @click.stop>
+          <div class="modal-header">
+            <h2>{{ pokemonData.name }} - Información adicional</h2>
+            <button class="close-button" @click="showModal = false">×</button>
+          </div>
         <div class="modal-body">
           <div class="modal-section">
             <h3>📏 Medidas</h3>
@@ -88,12 +89,14 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 <script>
 import { pokeapi } from "@/api/pokeapi";
+import Swal from 'sweetalert2';
 
 export default{
   name: "App",
@@ -110,7 +113,15 @@ export default{
   methods: {
     async searchPokemon() {
       if (!this.pokemonID.trim()) {
-        alert("Por favor, ingresa un nombre o ID de Pokémon");
+        Swal.fire({
+          icon: 'warning',
+          title: '¡Campo vacío!',
+          text: 'Por favor, ingresa un nombre o ID de Pokémon',
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#ff6b35',
+          background: '#fff',
+          color: '#333'
+        });
         return;
       }
 
@@ -121,7 +132,21 @@ export default{
       if (isNumeric) {
         const pokemonNumber = parseInt(pokemonInput);
         if (pokemonNumber < 1 || pokemonNumber > 1025) {
-          alert(`ID de Pokémon fuera de rango. Por favor ingresa un número entre 1 y 1025, o usa el nombre del Pokémon.`);
+          Swal.fire({
+            icon: 'error',
+            title: '¡Fuera de rango!',
+            html: `
+              <p>ID de Pokémon fuera de rango válido.</p>
+              <br>
+              <strong>🎯 Rango permitido:</strong> 1 - 1025
+              <br><br>
+              <em>💡 También puedes usar el nombre del Pokémon</em>
+            `,
+            confirmButtonText: 'Intentar de nuevo',
+            confirmButtonColor: '#e74c3c',
+            background: '#fff',
+            color: '#333'
+          });
           return;
         }
       }
@@ -163,6 +188,20 @@ export default{
           this.showCard = true;
         }, 30);
         
+        // Mostrar alerta de éxito con SweetAlert2
+        Swal.fire({
+          icon: 'success',
+          title: '¡Pokémon encontrado!',
+          text: `${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} cargado exitosamente`,
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end',
+          background: '#d4edda',
+          color: '#155724'
+        });
+        
         // Limpiar el campo de búsqueda después de encontrar el Pokémon
         this.pokemonID = '';
         
@@ -173,11 +212,38 @@ export default{
         this.isLoading = false;
         this.showCard = false;
         
-        // Mostrar alerta con mensaje personalizado
+        // Mostrar alerta con mensaje personalizado usando SweetAlert2
         if (error.message.includes('no existe') || error.message.includes('404')) {
-          alert(`❌ ${error.message}\n\n💡 Sugerencias:\n• Verifica la ortografía del nombre\n• Usa nombres en inglés (ej: pikachu, charizard)\n• Prueba con un ID válido (1-1025)`);
+          Swal.fire({
+            icon: 'error',
+            title: '¡Pokémon no encontrado!',
+            html: `
+              <p><strong>"${this.pokemonID}"</strong> no existe en la Pokédex.</p>
+              <br>
+              <div style="text-align: left; margin: 0 auto; display: inline-block;">
+                <strong>💡 Sugerencias:</strong><br>
+                • Verifica la ortografía del nombre<br>
+                • Usa nombres en inglés (ej: pikachu, charizard)<br>
+                • Prueba con un ID válido (1-1025)<br>
+                • Revisa que no tenga espacios extra
+              </div>
+            `,
+            confirmButtonText: 'Intentar de nuevo',
+            confirmButtonColor: '#e74c3c',
+            background: '#fff',
+            color: '#333',
+            width: '500px'
+          });
         } else {
-          alert(`⚠️ ${error.message}`);
+          Swal.fire({
+            icon: 'error',
+            title: '¡Error de conexión!',
+            text: error.message,
+            confirmButtonText: 'Reintentar',
+            confirmButtonColor: '#f39c12',
+            background: '#fff',
+            color: '#333'
+          });
         }
       }
     }
@@ -665,6 +731,94 @@ ul {
         }
       }
     }
+  }
+}
+
+// Transiciones del Modal
+.modal-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.modal-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-enter-from {
+  opacity: 0;
+}
+
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .modal-content {
+  transform: scale(0.7) translateY(-50px);
+  opacity: 0;
+}
+
+.modal-leave-to .modal-content {
+  transform: scale(0.8) translateY(30px);
+  opacity: 0;
+}
+
+.modal-enter-active .modal-content {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-leave-active .modal-content {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Animación del contenido del modal
+.modal-content {
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+// Animación escalonada para las secciones del modal
+.modal-body .modal-section {
+  animation: slideInModal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.modal-body .modal-section:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.modal-body .modal-section:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.modal-body .modal-section:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.modal-body .modal-section:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+@keyframes slideInModal {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Hover mejorado para el botón de cerrar
+.close-button {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 }
 
