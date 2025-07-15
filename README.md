@@ -1,4 +1,15 @@
-# üîç Pok√©mon Search App
+# ?? Pokemon Search App
+
+> **Una aplicaciÛn web moderna y modular para buscar informaciÛn detallada de Pokemon usando la PokeAPI**
+
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.2+-4FC08D?style=flat&logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![SCSS](https://img.shields.io/badge/SCSS-Modular-CC6699?style=flat&logo=sass&logoColor=white)](https://sass-lang.com/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-181717?style=flat&logo=github&logoColor=white)](https://erizhi1.github.io/pokemon/)
+[![PokeAPI](https://img.shields.io/badge/PokeAPI-v2-FF6B6B?style=flat&logo=pokemon&logoColor=white)](https://pokeapi.co/)
+
+## ?? **Demo en Vivo**
+
+?? **[Ver AplicaciÛn](https://erizhi1.github.io/pokemon/)**üîç Pok√©mon Search App
 
 Una aplicaci√≥n web moderna desarrollada en Vue.js 3 que permite buscar y explorar informaci√≥n detallada de Pok√©mon utilizando la Pok√©API.
 
