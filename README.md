@@ -13,6 +13,8 @@ Una aplicación web moderna desarrollada en Vue.js 3 que permite buscar y explor
 
 ## 🚀 Demo
 
+🌐 **[Ver aplicación en vivo](https://erizhi1.github.io/pokemon/)**
+
 ![Pokémon Search Demo](https://via.placeholder.com/800x400?text=Pokemon+Search+App+Demo)
 
 ## 🛠️ Tecnologías utilizadas
