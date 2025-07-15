@@ -1,0 +1,114 @@
+// Estilos del modal de detalles adicionales
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: $pokedex-red;
+  color: white;
+  border-radius: 15px 15px 0 0;
+
+  h2 {
+    margin: 0;
+    text-transform: capitalize;
+    font-family: 'Changa', sans-serif;
+    font-size: 1.3rem;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.modal-body {
+  padding: 20px;
+  
+  .modal-section {
+    margin-bottom: 20px;
+    animation: slideInModal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    
+    h3 {
+      color: $pokedex-red;
+      margin-bottom: 10px;
+      font-family: 'Changa', sans-serif;
+      font-size: 1.1rem;
+    }
+    
+    p {
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    .abilities-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .ability-tag {
+        background-color: rgba(63, 81, 181, 0.1);
+        border: 1px solid #3f51b5;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        text-transform: capitalize;
+
+        small {
+          color: #ff6b35;
+          font-weight: bold;
+        }
+      }
+    }
+
+    // Animaciones escalonadas para secciones
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.15s; }
+    &:nth-child(3) { animation-delay: 0.2s; }
+    &:nth-child(4) { animation-delay: 0.25s; }
+  }
+}

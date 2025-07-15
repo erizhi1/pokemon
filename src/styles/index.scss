@@ -1,0 +1,17 @@
+// Archivo principal de estilos para la aplicacion Pokemon
+// Importa todos los estilos organizados por modulos
+
+// Estilos base y variables
+@import './main.scss';
+
+// Componentes especificos
+@import './header.scss';
+@import './pokemon-card.scss';
+@import './modal.scss';
+
+// Efectos visuales
+@import './animations.scss';
+@import './transitions.scss';
+
+// Tipos de Pokemon (ya existente)
+@import '../pokemon_type.scss';

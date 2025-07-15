@@ -68,8 +68,8 @@
         <div class="modal-body">
           <div class="modal-section">
             <h3>📏 Medidas</h3>
-            <p><strong>Altura:</strong> {{ (pokemonData.height / 10).toFixed(1) }} m</p>
-            <p><strong>Peso:</strong> {{ (pokemonData.weight / 10).toFixed(1) }} kg</p>
+            <p><strong>Altura:</strong> {{ formatHeight(pokemonData.height) }} m</p>
+            <p><strong>Peso:</strong> {{ formatWeight(pokemonData.weight) }} kg</p>
           </div>
           <div class="modal-section">
             <h3>⭐ Experiencia</h3>
@@ -77,7 +77,7 @@
           </div>
           <div class="modal-section">
             <h3>🔢 Identificador</h3>
-            <p><strong>ID Nacional:</strong> #{{ pokemonData.id.toString().padStart(3, '0') }}</p>
+            <p><strong>ID Nacional:</strong> #{{ formatPokemonId(pokemonData.id) }}</p>
           </div>
           <div class="modal-section">
             <h3>🎮 Habilidades</h3>
@@ -95,10 +95,12 @@
   </div>
 </template>
 <script>
-import { pokeapi } from "@/api/pokeapi";
-import Swal from 'sweetalert2';
+// Importar helpers
+import { validatePokemonInput, searchCompletePokemon, formatPokemonName, formatHeight, formatWeight, formatPokemonId } from "@/helpers/pokemonService";
+import { showErrorAlert, showPokemonFoundAlert } from "@/helpers/alertService";
+import { createTransitionController } from "@/helpers/uiUtils";
 
-export default{
+export default {
   name: "App",
   data() {
     return {
@@ -110,760 +112,75 @@ export default{
       showCard: false,
     }
   },
+  created() {
+    // Inicializar controlador de transiciones
+    this.transitionController = createTransitionController(
+      (loading) => { this.isLoading = loading; },
+      (show) => { this.showCard = show; }
+    );
+  },
   methods: {
     async searchPokemon() {
-      if (!this.pokemonID.trim()) {
-        Swal.fire({
-          icon: 'warning',
-          title: '¡Campo vacío!',
-          text: 'Por favor, ingresa un nombre o ID de Pokémon',
-          confirmButtonText: 'Entendido',
-          confirmButtonColor: '#ff6b35',
-          background: '#fff',
-          color: '#333'
-        });
+      const inputValue = this.pokemonID;
+
+      // Validar input usando el helper
+      const validation = validatePokemonInput(inputValue);
+      if (!validation.isValid) {
+        showErrorAlert(validation.error, inputValue, validation.message);
         return;
       }
 
-      // Validar que si es un número, esté en el rango válido
-      const pokemonInput = this.pokemonID.trim();
-      const isNumeric = /^\d+$/.test(pokemonInput);
-      
-      if (isNumeric) {
-        const pokemonNumber = parseInt(pokemonInput);
-        if (pokemonNumber < 1 || pokemonNumber > 1025) {
-          Swal.fire({
-            icon: 'error',
-            title: '¡Fuera de rango!',
-            html: `
-              <p>ID de Pokémon fuera de rango válido.</p>
-              <br>
-              <strong>🎯 Rango permitido:</strong> 1 - 1025
-              <br><br>
-              <em>💡 También puedes usar el nombre del Pokémon</em>
-            `,
-            confirmButtonText: 'Intentar de nuevo',
-            confirmButtonColor: '#e74c3c',
-            background: '#fff',
-            color: '#333'
-          });
-          return;
-        }
-      }
-
       try {
-        // Mostrar loading y ocultar tarjeta anterior con transición más suave
-        this.isLoading = true;
-        this.showCard = false;
+        // Iniciar secuencia de transición
+        await this.transitionController.startSearchSequence();
+
+        // Buscar Pokémon usando el helper
+        const { pokemon, species } = await searchCompletePokemon(validation.input);
         
-        // Pausa más corta para la transición de salida
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        const pokemonTofind = await fetch (`${pokeapi}${this.pokemonID.toLowerCase()}`);
-        
-        if (!pokemonTofind.ok) {
-          // Mensaje de error más específico
-          if (pokemonTofind.status === 404) {
-            throw new Error(`El Pokémon "${this.pokemonID}" no existe. Verifica el nombre o ID.`);
-          } else {
-            throw new Error(`Error de conexión (${pokemonTofind.status}). Inténtalo de nuevo.`);
-          }
-        }
-        
-        const pokemon = await pokemonTofind.json();
+        // Actualizar datos
         this.pokemonData = pokemon;
-        
-        // Obtener información de la especie (incluye hábitat)
-        const speciesResponse = await fetch(pokemon.species.url);
-        const species = await speciesResponse.json();
         this.pokemonSpecies = species;
-        
-        // Pausa optimizada para mostrar el loading
-        await new Promise(resolve => setTimeout(resolve, 400));
-        
-        this.isLoading = false;
-        
-        // Mostrar la nueva tarjeta con transición de entrada más rápida
-        setTimeout(() => {
-          this.showCard = true;
-        }, 30);
-        
-        // Mostrar alerta de éxito con SweetAlert2
-        Swal.fire({
-          icon: 'success',
-          title: '¡Pokémon encontrado!',
-          text: `${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} cargado exitosamente`,
-          timer: 2000,
-          timerProgressBar: true,
-          showConfirmButton: false,
-          toast: true,
-          position: 'top-end',
-          background: '#d4edda',
-          color: '#155724'
-        });
-        
-        // Limpiar el campo de búsqueda después de encontrar el Pokémon
+
+        // Finalizar secuencia de éxito
+        await this.transitionController.finishSuccessSequence();
+
+        // Mostrar alerta de éxito
+        const formattedName = formatPokemonName(pokemon.name);
+        showPokemonFoundAlert(formattedName);
+
+        // Limpiar campo de búsqueda
         this.pokemonID = '';
-        
-        console.log(pokemon);
-        console.log(species);
+
+        // Log para debugging
+        console.log('Pokémon encontrado:', pokemon);
+        console.log('Especies:', species);
+
         return pokemon;
+
       } catch (error) {
-        this.isLoading = false;
-        this.showCard = false;
-        
-        // Mostrar alerta con mensaje personalizado usando SweetAlert2
+        // Manejar errores
+        this.transitionController.handleErrorSequence();
+
+        // Determinar tipo de error y mostrar alerta apropiada
         if (error.message.includes('no existe') || error.message.includes('404')) {
-          Swal.fire({
-            icon: 'error',
-            title: '¡Pokémon no encontrado!',
-            html: `
-              <p><strong>"${this.pokemonID}"</strong> no existe en la Pokédex.</p>
-              <br>
-              <div style="text-align: left; margin: 0 auto; display: inline-block;">
-                <strong>💡 Sugerencias:</strong><br>
-                • Verifica la ortografía del nombre<br>
-                • Usa nombres en inglés (ej: pikachu, charizard)<br>
-                • Prueba con un ID válido (1-1025)<br>
-                • Revisa que no tenga espacios extra
-              </div>
-            `,
-            confirmButtonText: 'Intentar de nuevo',
-            confirmButtonColor: '#e74c3c',
-            background: '#fff',
-            color: '#333',
-            width: '500px'
-          });
+          showErrorAlert('NOT_FOUND', inputValue);
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: '¡Error de conexión!',
-            text: error.message,
-            confirmButtonText: 'Reintentar',
-            confirmButtonColor: '#f39c12',
-            background: '#fff',
-            color: '#333'
-          });
+          showErrorAlert('CONNECTION_ERROR', inputValue, error.message);
         }
+
+        console.error('Error en búsqueda de Pokémon:', error);
       }
-    }
+    },
+
+    // Métodos de formateo importados como helpers
+    formatHeight,
+    formatWeight,
+    formatPokemonId
   }
 }
 
 </script>
 
 <style lang="scss" scoped>
-
-@import './pokemon_type.scss';
-@import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
-
-.header, .main, input[type="text"], .searchButton {
-  font-family: 'Changa', sans-serif;
-}
-
-.header, input[type="text"], .searchButton {
-  font-size: 1.5rem;
-}
-
-.main {
-  font-size: 1.2rem;
-  background-color: $pokedex-green;
-}
-
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  background-color: $pokedex-red;
-  color: white;
-
-  & .searchButton {
-  background-color: #1cb02b;
-  color: white;
-  border: none;
-  margin-left: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #1c8b0a;
-  }
-}
-
-  & input[type="text"] {
-    border-radius: 10px;
-    outline: none;
-    border: none;
-  }
-}
-
-
-.pokemonCard {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-content: center;
-
-  & .nameImage, & .type, & .stats, & .moves, & .habitat {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  & .nameImage {
-    & .pokemonName {
-      text-transform: capitalize;
-    }
-
-    & img {
-      width: 200px;
-      background-color: $pokedex-blue;
-      border-radius: 50%;
-    }
-
-    & .detailsButton {
-      margin-top: 15px;
-      padding: 8px 16px;
-      background-color: #ff6b35;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: 'Changa', sans-serif;
-      font-weight: bold;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #e55a2b;
-      }
-    }
-  }
-
-  & .type li {
-    width: 90%;
-    margin-bottom: 10px;
-    text-align: center;
-    border-radius: 20px;
-  }
-
-  & .stats li {
-    align-self: flex-start;
-  }
-}
-
-ul {
-  padding: 0;
-}
-
-.type {
-  & li {
-    list-style: none;
-    color: white;
-    text-transform: uppercase;
-  }
-}
-
-.stats {
-  color: black;
-
-  & li {
-    list-style: none;
-    text-transform: uppercase;
-  }
-}
-
-.moves {
-  color: black;
-
-  & li {
-    list-style: none;
-    text-transform: capitalize;
-    margin-bottom: 5px;
-    padding: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    width: 90%;
-    text-align: center;
-  }
-}
-
-.habitat {
-  color: black;
-
-  & li {
-    list-style: none;
-    text-transform: capitalize;
-    padding: 10px;
-    background-color: rgba(76, 175, 80, 0.2);
-    border: 2px solid #4caf50;
-    border-radius: 10px;
-    width: 90%;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-}
-
-.normal {
-  background-color: $normal
-}
-.fire {
-  background-color: $fire
-}
-.water {
-  background-color: $water
-}
-.grass {
-  background-color: $grass
-}
-.electric {
-  background-color: $electric
-}
-.ice {
-  background-color: $ice
-}
-.fighting {
-  background-color: $fighting
-}
-.poison {
-  background-color: $poison
-}
-.ground {
-  background-color: $ground
-}
-.flying {
-  background-color: $flying
-}
-.psychic {
-  background-color: $psychic
-}
-.bug {
-  background-color: $bug
-}
-.rock {
-  background-color: $rock
-}
-.ghost {
-  background-color: $ghost
-}
-.dark {
-  background-color: $dark
-}
-.dragon {
-  background-color: $dragon
-}
-.steel {
-  background-color: $steel
-}
-.fairy {
-  background-color: $fairy
-}
-
-// Estilos de Loading
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-  padding: 50px;
-}
-
-.pokeball-spinner {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(to bottom, #ff6b6b 50%, white 50%);
-  border: 4px solid #333;
-  animation: spin 0.8s linear infinite;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background: white;
-    border: 4px solid #333;
-    border-radius: 50%;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: #333;
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.loading-text {
-  margin-top: 20px;
-  font-size: 1.2rem;
-  color: #333;
-  font-family: 'Changa', sans-serif;
-  font-weight: bold;
-  animation: pulse 1.2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-// Transiciones de la tarjeta Pokémon - Mejoradas
-.pokemon-card-enter-active {
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.pokemon-card-leave-active {
-  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-}
-
-.pokemon-card-enter-from {
-  opacity: 0;
-  transform: translateY(40px) scale(0.85);
-}
-
-.pokemon-card-leave-to {
-  opacity: 0;
-  transform: translateY(-30px) scale(0.9);
-}
-
-.pokemon-card-enter-to,
-.pokemon-card-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-// Animación de entrada mejorada para elementos individuales
-.pokemonCard {
-  animation: slideInUpImproved 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@keyframes slideInUpImproved {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateY(-5px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-// Animaciones escalonadas mejoradas para las secciones
-.pokemonCard .nameImage {
-  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
-}
-
-.pokemonCard .type {
-  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
-}
-
-.pokemonCard .stats {
-  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
-}
-
-.pokemonCard .moves {
-  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both;
-}
-
-.pokemonCard .habitat {
-  animation: fadeInScaleImproved 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
-}
-
-@keyframes fadeInScaleImproved {
-  0% {
-    opacity: 0;
-    transform: translateY(25px) scale(0.9);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateY(-3px) scale(1.01);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-// Efecto hover mejorado para el botón de búsqueda
-.searchButton {
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background-color: #1c8b0a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(28, 139, 10, 0.3);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-// Efecto hover para el botón de detalles
-.detailsButton {
-  &:hover {
-    background-color: #e55a2b;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 6px rgba(229, 90, 43, 0.3);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-// Estilos del Modal
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background-color: $pokedex-red;
-  color: white;
-  border-radius: 15px 15px 0 0;
-
-  h2 {
-    margin: 0;
-    text-transform: capitalize;
-    font-family: 'Changa', sans-serif;
-    font-size: 1.3rem;
-  }
-
-  .close-button {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-    }
-  }
-}
-
-.modal-body {
-  padding: 20px;
-  
-  .modal-section {
-    margin-bottom: 20px;
-    
-    h3 {
-      color: $pokedex-red;
-      margin-bottom: 10px;
-      font-family: 'Changa', sans-serif;
-      font-size: 1.1rem;
-    }
-    
-    p {
-      margin: 5px 0;
-      line-height: 1.5;
-    }
-
-    .abilities-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-
-      .ability-tag {
-        background-color: rgba(63, 81, 181, 0.1);
-        border: 1px solid #3f51b5;
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 0.9rem;
-        text-transform: capitalize;
-
-        small {
-          color: #ff6b35;
-          font-weight: bold;
-        }
-      }
-    }
-  }
-}
-
-// Transiciones del Modal
-.modal-enter-active {
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.modal-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.modal-enter-from {
-  opacity: 0;
-}
-
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-from .modal-content {
-  transform: scale(0.7) translateY(-50px);
-  opacity: 0;
-}
-
-.modal-leave-to .modal-content {
-  transform: scale(0.8) translateY(30px);
-  opacity: 0;
-}
-
-.modal-enter-active .modal-content {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.modal-leave-active .modal-content {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-// Animación del contenido del modal
-.modal-content {
-  transform-origin: center;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-// Animación escalonada para las secciones del modal
-.modal-body .modal-section {
-  animation: slideInModal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
-
-.modal-body .modal-section:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.modal-body .modal-section:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.modal-body .modal-section:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.modal-body .modal-section:nth-child(4) {
-  animation-delay: 0.25s;
-}
-
-@keyframes slideInModal {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-// Hover mejorado para el botón de cerrar
-.close-button {
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    transform: scale(1.1);
-  }
-  
-  &:active {
-    transform: scale(0.95);
-  }
-}
-
-@media screen and (max-width: 820px) {
-
-  .header {
-    flex-direction: column;
-    height: 120px;
-
-    & .searchButton {
-      width: 70%;
-      margin-top: 10px;
-    }
-  }
-  .pokemonCard {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header {
-    font-size: 1rem;
-
-    & input[type="text"] {
-      font-size: 1rem;
-    }
-
-    & .searchButton {
-      font-size: 1rem;
-    }
-  }
-
-  .pokemonCard {
-    & .stats, & .moves, & .habitat {
-      width: 90%;
-    }
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .header {
-    & label {
-      text-align: center;
-    }
-  }
-}
+@import './styles/index.scss';
 </style>

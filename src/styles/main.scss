@@ -1,0 +1,78 @@
+// Estilos principales de la aplicacion Pokemon
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
+@import '../pokemon_type.scss';
+
+// Variables globales
+$pokedex-red: #dc143c;
+$pokedex-green: #32cd32;
+$pokedex-blue: #4169e1;
+
+// Estilos base
+.header, .main, input[type="text"], .searchButton {
+  font-family: 'Changa', sans-serif;
+}
+
+.header, input[type="text"], .searchButton {
+  font-size: 1.5rem;
+}
+
+.main {
+  font-size: 1.2rem;
+  background-color: $pokedex-green;
+}
+
+// Clases de tipos de Pokemon
+.normal {
+  background-color: $normal
+}
+.fire {
+  background-color: $fire
+}
+.water {
+  background-color: $water
+}
+.grass {
+  background-color: $grass
+}
+.electric {
+  background-color: $electric
+}
+.ice {
+  background-color: $ice
+}
+.fighting {
+  background-color: $fighting
+}
+.poison {
+  background-color: $poison
+}
+.ground {
+  background-color: $ground
+}
+.flying {
+  background-color: $flying
+}
+.psychic {
+  background-color: $psychic
+}
+.bug {
+  background-color: $bug
+}
+.rock {
+  background-color: $rock
+}
+.ghost {
+  background-color: $ghost
+}
+.dark {
+  background-color: $dark
+}
+.dragon {
+  background-color: $dragon
+}
+.steel {
+  background-color: $steel
+}
+.fairy {
+  background-color: $fairy
+}
