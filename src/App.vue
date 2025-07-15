@@ -3,12 +3,24 @@
     <header class="header">
       <label for="">
         Escribe el Pokemon que quieras buscar (por ID o nombre):
-        <input type="text" v-model="pokemonID" placeholder="Ej: 25 o pikachu" />
+        <input type="text" v-model="pokemonID" placeholder="Ej: 25 o pikachu" @keyup.enter="searchPokemon" />
         <button class="searchButton" @click="searchPokemon">Buscar Pokemon</button>
       </label>
     </header>
-    <main class="main" v-if="Object.entries(pokemonData).length > 0">
-      <section class="pokemonCard">
+    <main class="main" v-if="Object.entries(pokemonData).length > 0 || isLoading">
+      <!-- Loading Spinner -->
+      <div v-if="isLoading" class="loading-container">
+        <div class="pokeball-spinner">
+          <div class="pokeball-top"></div>
+          <div class="pokeball-middle"></div>
+          <div class="pokeball-bottom"></div>
+        </div>
+        <p class="loading-text">Buscando Pokémon...</p>
+      </div>
+
+      <!-- Tarjeta del Pokémon con transición -->
+      <transition name="pokemon-card" appear>
+        <section v-if="!isLoading && Object.entries(pokemonData).length > 0 && showCard" class="pokemonCard">
         <div class="nameImage">
           <h1 class="pokemonName">{{ pokemonData.name }}</h1>
           <img :src="pokemonData.sprites.front_default" :alt="pokemonData.name" >
@@ -42,6 +54,7 @@
           </li>
         </ul>
       </section>
+      </transition>
     </main>
     
     <!-- Modal para información adicional -->
@@ -90,25 +103,56 @@ export default{
       pokemonSpecies: {},
       pokemonID: '',
       showModal: false,
+      isLoading: false,
+      showCard: false,
     }
   },
   methods: {
     async searchPokemon() {
+      if (!this.pokemonID.trim()) {
+        alert("Por favor, ingresa un nombre o ID de Pokémon");
+        return;
+      }
+
       try {
-       const pokemonTofind = await fetch (`${pokeapi}${this.pokemonID}`);
-       const pokemon = await pokemonTofind.json();
-       this.pokemonData = pokemon;
-       
-       // Obtener informaci�n de la especie (incluye h�bitat)
-       const speciesResponse = await fetch(pokemon.species.url);
-       const species = await speciesResponse.json();
-       this.pokemonSpecies = species;
-       
-       console.log(pokemon);
-       console.log(species);
-       return pokemon;
-       } catch (error) {
-        alert("Error al buscar el Pok�mon. Por favor, int�ntalo de nuevo.");
+        // Mostrar loading y ocultar tarjeta anterior con transición
+        this.isLoading = true;
+        this.showCard = false;
+        
+        // Pequeña pausa para la transición de salida
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        const pokemonTofind = await fetch (`${pokeapi}${this.pokemonID.toLowerCase()}`);
+        
+        if (!pokemonTofind.ok) {
+          throw new Error(`Pokémon no encontrado: ${this.pokemonID}`);
+        }
+        
+        const pokemon = await pokemonTofind.json();
+        this.pokemonData = pokemon;
+        
+        // Obtener información de la especie (incluye hábitat)
+        const speciesResponse = await fetch(pokemon.species.url);
+        const species = await speciesResponse.json();
+        this.pokemonSpecies = species;
+        
+        // Pausa para mostrar el loading un poco más
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        this.isLoading = false;
+        
+        // Mostrar la nueva tarjeta con transición de entrada
+        setTimeout(() => {
+          this.showCard = true;
+        }, 50);
+        
+        console.log(pokemon);
+        console.log(species);
+        return pokemon;
+      } catch (error) {
+        this.isLoading = false;
+        this.showCard = false;
+        alert(`Error al buscar el Pokémon "${this.pokemonID}". Verifica que el nombre o ID sea correcto.`);
       }
     }
   }
@@ -324,6 +368,170 @@ ul {
 }
 .fairy {
   background-color: $fairy
+}
+
+// Estilos de Loading
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 50px;
+}
+
+.pokeball-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #ff6b6b 50%, white 50%);
+  border: 4px solid #333;
+  animation: spin 1s linear infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 4px solid #333;
+    border-radius: 50%;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #333;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #333;
+  font-family: 'Changa', sans-serif;
+  font-weight: bold;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+// Transiciones de la tarjeta Pokémon
+.pokemon-card-enter-active {
+  transition: all 0.6s ease-out;
+}
+
+.pokemon-card-leave-active {
+  transition: all 0.4s ease-in;
+}
+
+.pokemon-card-enter-from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+}
+
+.pokemon-card-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+.pokemon-card-enter-to,
+.pokemon-card-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+// Animación de entrada para elementos individuales
+.pokemonCard {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animaciones escalonadas para las secciones
+.pokemonCard .nameImage {
+  animation: fadeInScale 0.8s ease-out 0.1s both;
+}
+
+.pokemonCard .type {
+  animation: fadeInScale 0.8s ease-out 0.2s both;
+}
+
+.pokemonCard .stats {
+  animation: fadeInScale 0.8s ease-out 0.3s both;
+}
+
+.pokemonCard .moves {
+  animation: fadeInScale 0.8s ease-out 0.4s both;
+}
+
+.pokemonCard .habitat {
+  animation: fadeInScale 0.8s ease-out 0.5s both;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Efecto hover mejorado para el botón de búsqueda
+.searchButton {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #1c8b0a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(28, 139, 10, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Efecto hover para el botón de detalles
+.detailsButton {
+  &:hover {
+    background-color: #e55a2b;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(229, 90, 43, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 // Estilos del Modal
