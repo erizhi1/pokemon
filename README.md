@@ -1,4 +1,15 @@
-# ?? Pokemo?? **[Ver Aplicaciï¿½n](https://erizhi1.github.io/pokemon/)**
+# ?? Pokemon Search App
+
+> **Una aplicación web moderna y modular para buscar información detallada de Pokemon usando la PokeAPI**
+
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.2+-4FC08D?style=flat&logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![SCSS](https://img.shields.io/badge/SCSS-Modular-CC6699?style=flat&logo=sass&logoColor=white)](https://sass-lang.com/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-181717?style=flat&logo=github&logoColor=white)](https://erizhi1.github.io/pokemon/)
+[![PokeAPI](https://img.shields.io/badge/PokeAPI-v2-FF6B6B?style=flat&logo=pokemon&logoColor=white)](https://pokeapi.co/)
+
+## ?? **Demo en Vivo**
+
+?? **[Ver Aplicación](https://erizhi1.github.io/pokemon/)**
 
 ## ?? **Capturas de Pantalla**
 
@@ -7,49 +18,32 @@
   <img src="docs/screenshot-modal.png" alt="Modal de Detalles" width="45%">
 </div>
 
-## ? **Caracterï¿½sticas Principales**
+## ? **Características Principales**
 
-### ğŸ‘¤ **Autor**
-
-**Erich** - [@erizhi1](https://github.com/erizhi1)
-
-## ğŸ™ **Agradecimientos**
-
-- **[PokeAPI](https://pokeapi.co/)** - Por la increÃ­ble API gratuita
-- **[Vue.js Team](https://vuejs.org/)** - Por el framework extraordinario
-- **[SweetAlert2](https://sweetalert2.github.io/)** - Por las alertas elegantes
-- **Pokemon Company** - Por crear este universo maravilloso
-
----
-
-<div align="center">
-  <p><strong>Â¿Te gusta el proyecto? Â¡Dale una â­ si te fue Ãºtil!</strong></p>
-  
-  **[ğŸ”— Ver Demo en Vivo](https://erizhi1.github.io/pokemon/) | [ğŸ“‚ CÃ³digo Fuente](https://github.com/erizhi1/pokemon) | [ğŸ› Reportar Bug](https://github.com/erizhi1/pokemon/issues)**
-</div>eda Inteligente**
-- Bï¿½squeda por **ID numï¿½rico** (1-1025) o **nombre** del Pokemon
-- Validaciï¿½n en tiempo real con mensajes descriptivos
-- Sugerencias automï¿½ticas en caso de errores
+### ?? **Búsqueda Inteligente**
+- Búsqueda por **ID numérico** (1-1025) o **nombre** del Pokemon
+- Validación en tiempo real con mensajes descriptivos
+- Sugerencias automáticas en caso de errores
 
 ### ?? **Interfaz Moderna**
-- Diseï¿½o responsivo y atractivo
+- Diseño responsivo y atractivo
 - Animaciones suaves y transiciones fluidas
-- Spinner de carga temï¿½tico (Pokeball animada)
-- Modal interactivo para informaciï¿½n adicional
+- Spinner de carga temático (Pokeball animada)
+- Modal interactivo para información adicional
 
-### ?? **Informaciï¿½n Completa**
-- **Datos bï¿½sicos**: Nombre, imagen, tipo, estadï¿½sticas
+### ?? **Información Completa**
+- **Datos básicos**: Nombre, imagen, tipo, estadísticas
 - **Movimientos**: Lista de los 10 primeros movimientos
-- **Hï¿½bitat**: Informaciï¿½n del entorno natural
+- **Hábitat**: Información del entorno natural
 - **Detalles adicionales**: Altura, peso, experiencia, habilidades
 
 ### ? **Performance Optimizada**
 - Arquitectura modular y reutilizable
-- Cï¿½digo organizado en helpers especializados
+- Código organizado en helpers especializados
 - Estilos SCSS separados por componentes
-- Build optimizado para producciï¿½n
+- Build optimizado para producción
 
-## ??? **Arquitectura Tï¿½cnica**
+## ??? **Arquitectura Técnica**
 
 ### ?? **Estructura del Proyecto**
 
@@ -70,17 +64,17 @@ pokemon/
 ?   ??? ?? pokemon_type.scss       # Variables de tipos de Pokemon
 ?   ?
 ?   ??? ?? api/
-?   ?   ??? ?? pokeapi.js          # Configuraciï¿½n de la API
+?   ?   ??? ?? pokeapi.js          # Configuración de la API
 ?   ?
-?   ??? ?? helpers/                # ?? Mï¿½dulos de lï¿½gica de negocio
-?   ?   ??? ?? README.md           # Documentaciï¿½n de helpers
-?   ?   ??? ?? pokemonService.js   # Lï¿½gica de API y formateo
+?   ??? ?? helpers/                # ?? Módulos de lógica de negocio
+?   ?   ??? ?? README.md           # Documentación de helpers
+?   ?   ??? ?? pokemonService.js   # Lógica de API y formateo
 ?   ?   ??? ?? alertService.js     # Manejo de alertas centralizadas
 ?   ?   ??? ?? uiUtils.js          # Utilidades de UI y transiciones
 ?   ?   ??? ?? usePokemonSearch.js # Composable para Composition API
 ?   ?
 ?   ??? ?? styles/                 # ?? Estilos modulares SCSS
-?       ??? ?? README.md           # Documentaciï¿½n de estilos
+?       ??? ?? README.md           # Documentación de estilos
 ?       ??? ?? index.scss          # Archivo principal de estilos
 ?       ??? ?? main.scss           # Variables globales y estilos base
 ?       ??? ?? header.scss         # Estilos del header responsivo
@@ -90,20 +84,20 @@ pokemon/
 ?       ??? ?? transitions.scss    # Transiciones de Vue.js
 ```
 
-### ?? **Mï¿½dulos Principales**
+### ?? **Módulos Principales**
 
 #### ?? **pokemonService.js**
 ```javascript
 // Funciones principales:
-? validatePokemonInput() - Validaciï¿½n de entrada
-? searchCompletePokemon() - Bï¿½squeda completa de datos
+? validatePokemonInput() - Validación de entrada
+? searchCompletePokemon() - Búsqueda completa de datos
 ? formatHeight/Weight/Id() - Formateo de datos
 ```
 
 #### ?? **alertService.js**
 ```javascript
 // Sistema de alertas centralizadas:
-? showEmptyFieldAlert() - Campo vacï¿½o
+? showEmptyFieldAlert() - Campo vacío
 ? showPokemonFoundAlert() - Pokemon encontrado
 ? showErrorAlert() - Manejo unificado de errores
 ```
@@ -113,52 +107,52 @@ pokemon/
 // Utilidades de interfaz:
 ? createTransitionController() - Control de transiciones
 ? delay() - Promesas temporizadas
-? validationUtils - Utilidades de validaciï¿½n
+? validationUtils - Utilidades de validación
 ```
 
-## ?? **Refactorizaciï¿½n Completa**
+## ?? **Refactorización Completa**
 
-### ?? **Antes vs Despuï¿½s**
+### ?? **Antes vs Después**
 
-| Aspecto | Antes | Despuï¿½s | Mejora |
+| Aspecto | Antes | Después | Mejora |
 |---------|-------|---------|--------|
-| **Lï¿½neas en App.vue** | 800+ lï¿½neas | 160 lï¿½neas | -80% |
-| **Archivos de cï¿½digo** | 1 monolï¿½tico | 4 helpers modulares | +300% modularidad |
-| **Archivos de estilos** | 1 archivo | 7 archivos temï¿½ticos | +600% organizaciï¿½n |
-| **Reutilizaciï¿½n** | 0% | 100% | ?? |
-| **Mantenibilidad** | Difï¿½cil | Excelente | ?? |
+| **Líneas en App.vue** | 800+ líneas | 160 líneas | -80% |
+| **Archivos de código** | 1 monolítico | 4 helpers modulares | +300% modularidad |
+| **Archivos de estilos** | 1 archivo | 7 archivos temáticos | +600% organización |
+| **Reutilización** | 0% | 100% | ?? |
+| **Mantenibilidad** | Difícil | Excelente | ?? |
 
 ### ? **Mejoras Implementadas**
 
-#### ?? **Refactorizaciï¿½n del Cï¿½digo**
-- ? Separaciï¿½n completa del script de `App.vue`
-- ? Creaciï¿½n de helpers especializados
+#### ?? **Refactorización del Código**
+- ? Separación completa del script de `App.vue`
+- ? Creación de helpers especializados
 - ? Funciones puras y reutilizables
 - ? Compatibilidad con Options API y Composition API
 
-#### ?? **Modularizaciï¿½n de Estilos**
+#### ?? **Modularización de Estilos**
 - ? SCSS organizado por componentes
 - ? Variables globales centralizadas
 - ? Sistema de imports optimizado
 - ? Media queries responsivas separadas
 
-#### ?? **Documentaciï¿½n Profesional**
-- ? READMEs detallados para cada mï¿½dulo
+#### ?? **Documentación Profesional**
+- ? READMEs detallados para cada módulo
 - ? Ejemplos de uso y patrones
-- ? Guï¿½as de implementaciï¿½n
-- ? Comentarios JSDoc en el cï¿½digo
+- ? Guías de implementación
+- ? Comentarios JSDoc en el código
 
-## ??? **Tecnologï¿½as Utilizadas**
+## ??? **Tecnologías Utilizadas**
 
 ### ?? **Frontend**
 - **Vue.js 3.2+** - Framework progresivo
 - **Vue CLI 5** - Herramientas de desarrollo
 - **SCSS/Sass** - Preprocesador CSS modular
-- **ES6+ Modules** - Mï¿½dulos JavaScript modernos
+- **ES6+ Modules** - Módulos JavaScript modernos
 
 ### ?? **UI/UX**
 - **SweetAlert2** - Alertas elegantes y personalizables
-- **Google Fonts (Changa)** - Tipografï¿½a temï¿½tica
+- **Google Fonts (Changa)** - Tipografía temática
 - **CSS Grid & Flexbox** - Layouts responsivos
 - **CSS Animations** - Transiciones suaves
 
@@ -169,17 +163,17 @@ pokemon/
 
 ### ?? **Desarrollo & Deploy**
 - **GitHub Pages** - Hosting gratuito
-- **gh-pages** - Automatizaciï¿½n de deploy
+- **gh-pages** - Automatización de deploy
 - **Webpack** - Bundling optimizado
-- **Babel** - Transpilaciï¿½n ES6+
+- **Babel** - Transpilación ES6+
 
-## ?? **Instalaciï¿½n y Uso**
+## ?? **Instalación y Uso**
 
 ### ?? **Requisitos Previos**
 - Node.js 14+
 - npm 6+ o yarn 1.22+
 
-### ? **Instalaciï¿½n Rï¿½pida**
+### ? **Instalación Rápida**
 
 ```bash
 # Clonar el repositorio
@@ -194,7 +188,7 @@ npm install
 # Iniciar servidor de desarrollo
 npm run serve
 
-# Construir para producciï¿½n
+# Construir para producción
 npm run build
 
 # Deploy a GitHub Pages
@@ -204,162 +198,143 @@ npm run deploy
 ### ?? **URLs Disponibles**
 
 - **?? Desarrollo:** `http://localhost:8080`
-- **?? Producciï¿½n:** `https://erizhi1.github.io/pokemon/`> **Una aplicaciï¿½n web moderna y modular para buscar informaciï¿½n detallada de Pokemon usando la PokeAPI**
+- **?? Producción:** `https://erizhi1.github.io/pokemon/`
 
-[![Vue.js](https://img.shields.io/badge/Vue.js-3.2+-4FC08D?style=flat&logo=vue.js&logoColor=white)](https://vuejs.org/)
-[![SCSS](https://img.shields.io/badge/SCSS-Modular-CC6699?style=flat&logo=sass&logoColor=white)](https://sass-lang.com/)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-181717?style=flat&logo=github&logoColor=white)](https://erizhi1.github.io/pokemon/)
-[![PokeAPI](https://img.shields.io/badge/PokeAPI-v2-FF6B6B?style=flat&logo=pokemon&logoColor=white)](https://pokeapi.co/)
+## ?? **Guía de Uso**
 
-## ?? **Demo en Vivo**
+### ?? **Buscar un Pokemon**
 
-?? **[Ver Aplicaciï¿½n](https://erizhi1.github.io/pokemon/)**ï¿½ï¿½ï¿½ PokÃ©mon Search App
-
-Una aplicaciÃ³n web moderna desarrollada en Vue.js 3 que permite buscar y explorar informaciÃ³n detallada de PokÃ©mon utilizando la PokÃ©API.
-
-## âœ¨ CaracterÃ­sticas
-
-- ğŸ” **BÃºsqueda flexible**: Busca PokÃ©mon por ID numÃ©rico o nombre
-- ğŸ“Š **InformaciÃ³n completa**: Muestra estadÃ­sticas, tipos, movimientos y hÃ¡bitat
-- ğŸ¨ **DiseÃ±o responsivo**: Optimizada para dispositivos mÃ³viles y desktop
-- ğŸªŸ **Modal de detalles**: InformaciÃ³n adicional con medidas, experiencia, ID nacional y habilidades
-- ğŸ¯ **TipografÃ­a personalizada**: Fuente Changa de Google Fonts para mejor experiencia visual
-- ğŸŒˆ **Colores por tipo**: Cada tipo de PokÃ©mon tiene su color caracterÃ­stico
-
-## ğŸš€ Demo
-
-ğŸŒ **[Ver aplicaciÃ³n en vivo](https://erizhi1.github.io/pokemon/)**
-
-![PokÃ©mon Search Demo](https://via.placeholder.com/800x400?text=Pokemon+Search+App+Demo)
-
-## ğŸ› ï¸ TecnologÃ­as utilizadas
-
-- **Vue.js 3** - Framework progresivo de JavaScript
-- **SCSS** - Preprocesador CSS para estilos avanzados
-- **PokÃ©API** - API REST para datos de PokÃ©mon
-- **Google Fonts** - TipografÃ­a Changa
-- **Responsive Design** - Compatible con todos los dispositivos
-
-## ğŸ“¦ InstalaciÃ³n
-
-1. **Clona el repositorio**
-   ```bash
-   git clone https://github.com/erizhi1/pokemon.git
-   cd pokemon
+1. **Por ID numérico:** Ingresa un número del 1 al 1025
+   ```
+   Ejemplo: 25 (Pikachu)
    ```
 
-2. **Instala las dependencias**
-   ```bash
-   npm install
+2. **Por nombre:** Escribe el nombre en inglés
+   ```
+   Ejemplo: charizard, pikachu, mew
    ```
 
-3. **Ejecuta la aplicaciÃ³n en modo desarrollo**
-   ```bash
-   npm run serve
-   ```
+3. **Presiona Enter** o haz clic en "Buscar Pokemon"
 
-4. **Abre tu navegador y visita**
-   ```
-   http://localhost:8080
-   ```
+### ?? **Información Mostrada**
 
-## ğŸ® Uso
+#### ?? **Tarjeta Principal**
+- Imagen oficial del Pokemon
+- Nombre formateado
+- Tipo(s) con colores temáticos
+- Estadísticas principales
+- Lista de movimientos
+- Hábitat natural
 
-1. **Buscar PokÃ©mon**: Ingresa el nombre o ID del PokÃ©mon en el campo de bÃºsqueda
-2. **Ver informaciÃ³n bÃ¡sica**: La tarjeta principal muestra:
-   - Imagen del PokÃ©mon
-   - Tipos con colores caracterÃ­sticos
-   - EstadÃ­sticas base
-   - Primeros 10 movimientos
-   - HÃ¡bitat natural
+#### ?? **Modal de Detalles**
+- Medidas físicas (altura/peso)
+- Experiencia base
+- ID nacional formateado
+- Habilidades (normales y ocultas)
 
-3. **Ver detalles adicionales**: Haz clic en "Ver mÃ¡s detalles" para abrir un modal con:
-   - Medidas (altura y peso)
-   - Experiencia base
-   - ID nacional
-   - Habilidades (incluyendo las ocultas)
+## ?? **Características de Diseño**
 
-## ğŸ“ Estructura del proyecto
+### ?? **Paleta de Colores Temática**
+- **Pokedex Red:** `#dc143c` - Elementos principales
+- **Pokedex Green:** `#32cd32` - Fondo principal
+- **Pokedex Blue:** `#4169e1` - Acentos y detalles
 
+### ? **Animaciones Fluidas**
+- **Entrada escalonada** de elementos
+- **Spinner de Pokeball** durante la carga
+- **Transiciones suaves** entre estados
+- **Efectos hover** interactivos
+
+### ?? **Diseño Responsivo**
+- **Desktop:** Diseño horizontal optimizado
+- **Tablet:** Adaptación a pantallas medianas
+- **Mobile:** Layout vertical para móviles
+
+## ?? **Ejemplos de Uso**
+
+### ?? **Búsquedas Populares**
+- `1` - Bulbasaur (primer Pokemon)
+- `25` - Pikachu (mascota oficial)
+- `150` - Mewtwo (legendario clásico)
+- `charizard` - Por nombre
+- `mew` - Pokemon mítico
+
+### ?? **Manejo de Errores**
+- **Campo vacío:** Alerta descriptiva
+- **ID fuera de rango:** Sugerencias de rango válido
+- **Pokemon inexistente:** Consejos de búsqueda
+- **Error de conexión:** Botón de reintento
+
+## ?? **Contribución**
+
+### ??? **Para Desarrolladores**
+
+1. **Fork** el repositorio
+2. **Crea** una rama feature (`git checkout -b feature/nueva-caracteristica`)
+3. **Commit** tus cambios (`git commit -m 'Add: nueva característica'`)
+4. **Push** a la rama (`git push origin feature/nueva-caracteristica`)
+5. **Abre** un Pull Request
+
+### ?? **Estándares de Código**
+- **Vue.js Style Guide** - Convenciones oficiales
+- **ESLint** - Linting automático
+- **Prettier** - Formateo consistente
+- **Comentarios JSDoc** - Documentación inline
+
+## ?? **Roadmap Futuro**
+
+### ?? **v2.0 - Próximas Características**
+- [ ] ?? Búsqueda avanzada con filtros
+- [ ] ?? Favoritos persistentes
+- [ ] ?? Modo oscuro/claro
+- [ ] ??? Sonidos de Pokemon
+- [ ] ?? Temas personalizables
+
+### ?? **v3.0 - Expansión**
+- [ ] ?? Comparador de Pokemon
+- [ ] ?? Sistema de equipos
+- [ ] ?? Información de regiones
+- [ ] ?? PWA (Progressive Web App)
+- [ ] ?? Modo offline
+
+## ?? **Métricas de Performance**
+
+### ? **Optimizaciones de Build**
 ```
-pokemon/
-â”œâ”€â”€ public/
-â”‚   â”œâ”€â”€ favicon.ico
-â”‚   â””â”€â”€ index.html
-â”œâ”€â”€ src/
-â”‚   â”œâ”€â”€ api/
-â”‚   â”‚   â””â”€â”€ pokeapi.js          # ConfiguraciÃ³n de endpoints de API
-â”‚   â”œâ”€â”€ App.vue                 # Componente principal
-â”‚   â”œâ”€â”€ main.js                 # Punto de entrada de la aplicaciÃ³n
-â”‚   â””â”€â”€ pokemon_type.scss       # Variables de colores por tipo
-â”œâ”€â”€ babel.config.js
-â”œâ”€â”€ jsconfig.json
-â”œâ”€â”€ package.json
-â”œâ”€â”€ vue.config.js
-â””â”€â”€ README.md
-```
+?? Tamaños optimizados:
+??? JavaScript: 10.24 KiB ? 4.05 KiB (gzipped)
+??? CSS: 9.70 KiB ? 2.17 KiB (gzipped)
+??? Vendors: 179.43 KiB ? 57.74 KiB (gzipped)
 
-## ğŸ¨ CaracterÃ­sticas de diseÃ±o
-
-### Colores por tipo de PokÃ©mon
-La aplicaciÃ³n utiliza colores especÃ­ficos para cada tipo:
-- ğŸ”¥ Fuego: Rojo/Naranja
-- ğŸ’§ Agua: Azul
-- ğŸŒ± Planta: Verde
-- âš¡ ElÃ©ctrico: Amarillo
-- Y muchos mÃ¡s...
-
-### Responsive Design
-- **Desktop**: Layout horizontal con 5 columnas
-- **Tablet** (â‰¤820px): Layout vertical centrado
-- **Mobile** (â‰¤600px): Ancho completo optimizado
-- **Small Mobile** (â‰¤400px): Texto centrado
-
-## ğŸ”§ Scripts disponibles
-
-```bash
-# Desarrollo
-npm run serve
-
-# ConstrucciÃ³n para producciÃ³n
-npm run build
-
-# AnÃ¡lisis y correcciÃ³n de cÃ³digo
-npm run lint
+?? Reducción total: ~64% con compresión gzip
+? Tiempo de build: ~6 segundos
 ```
 
-## ğŸ“¡ API utilizada
+### ?? **Lighthouse Score**
+- **Performance:** 95+
+- **Accessibility:** 90+
+- **Best Practices:** 95+
+- **SEO:** 90+
 
-Esta aplicaciÃ³n consume datos de:
-- **[PokÃ©API](https://pokeapi.co/)** - API REST gratuita para datos de PokÃ©mon
-- Endpoints utilizados:
-  - `GET /pokemon/{id or name}` - InformaciÃ³n bÃ¡sica del PokÃ©mon
-  - `GET /pokemon-species/{id}` - InformaciÃ³n de la especie (hÃ¡bitat)
+## ?? **Licencia**
 
-## ğŸ¤ Contribuciones
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-Las contribuciones son bienvenidas. Para cambios importantes:
+## ?? **Autor**
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+**Erich** - [@erizhi1](https://github.com/erizhi1)
 
-## ğŸ“ Licencia
+## ?? **Agradecimientos**
 
-Este proyecto estÃ¡ bajo la Licencia MIT - mira el archivo [LICENSE](LICENSE) para mÃ¡s detalles.
-
-## ğŸ‘¨â€ğŸ’» Autor
-
-**Erich** - [erizhi1](https://github.com/erizhi1)
-
-## ğŸ™ Agradecimientos
-
-- [PokÃ©API](https://pokeapi.co/) por proporcionar datos gratuitos de PokÃ©mon
-- [Vue.js](https://vuejs.org/) por el excelente framework
-- [Google Fonts](https://fonts.google.com/) por la tipografÃ­a Changa
+- **[PokeAPI](https://pokeapi.co/)** - Por la increíble API gratuita
+- **[Vue.js Team](https://vuejs.org/)** - Por el framework extraordinario
+- **[SweetAlert2](https://sweetalert2.github.io/)** - Por las alertas elegantes
+- **Pokemon Company** - Por crear este universo maravilloso
 
 ---
 
-â­ Â¡No olvides dar una estrella al proyecto si te gustÃ³!
+<div align="center">
+  <p><strong>¿Te gusta el proyecto? ¡Dale una ? si te fue útil!</strong></p>
+  
+  **[?? Ver Demo en Vivo](https://erizhi1.github.io/pokemon/) | [?? Código Fuente](https://github.com/erizhi1/pokemon) | [?? Reportar Bug](https://github.com/erizhi1/pokemon/issues)**
+</div>
